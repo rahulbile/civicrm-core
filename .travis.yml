@@ -2,3 +2,29 @@ language: php
 
 php:
   - 5.4
+
+branches:
+only:
+  - travis-build
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+env:
+  - UPGRADE=none
+
+install:
+  - sudo apt-get update > /dev/null
+  - "mysql -e 'create database drupal;'"
+
+  # Install the latest Drush 6.
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer global require drush/drush:6.*
+
+  # Build Codebase
+  - git clone https://github.com/civicrm/civicrm-drupal-project.git -b 7.x-master
+  - cd civicrm-drupal-project/bin
+  - ./civi-download
+
